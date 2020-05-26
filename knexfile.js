@@ -1,4 +1,4 @@
-const pgConnection = process.env.DATABASE_URL || "postgresql://postgres@localhost/";
+const pgConnection = process.env.DATABASE_URL || "postgresql://postgres@localhost/hobbits";
 
 
 module.exports = {
