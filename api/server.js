@@ -16,7 +16,7 @@ server.use("/api/users", authenticate, usersRouter);
 server.use("/api/auth", authRouter);
 
 server.get('/', (req, res) => {
-    res.json({ api: "UP! "});
+    res.json({ api: "UP and Running! "});
 })
 
 
