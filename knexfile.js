@@ -4,7 +4,7 @@ const pgConnection = process.env.DATABASE_URL;
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: "pg",
     useNullAsDefault: true,
     connection: {
       filename: './data/database.db3'
@@ -24,7 +24,7 @@ module.exports = {
   },
 
   testing: {
-    client: "sqlite3",
+    client: "pg",
     connection: {
       filename: "./data/test.db3",
     },
