@@ -42,18 +42,17 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
+    connection: "postgres://eclvugdypaeufi:4a23dec54ec7af35292eff5319cf513982ea0f555be9b9e2c0d9131081529b0b@ec2-52-202-146-43.compute-1.amazonaws.com:5432/dbs5ib11d9v8d6",
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
+      directory: "./data/migrations",
+    },
+    seeds: {
+      directory: "./data/seeds",
+    },
   }
 
 };
