@@ -1,4 +1,4 @@
-// const pgConnection = process.env.DATABASE_URL || "postgresql://postgres@localhost/hobbits";
+const pgConnection = process.env.DATABASE_URL || "postgresql://postgres@localhost/";
 
 
 module.exports = {
@@ -61,7 +61,7 @@ module.exports = {
 
   production: {
     client: "pg",
-    connection: process.env.DATABASE_URL,
+    connection: pgConnection,
     useNullAsDefault: true,
     migrations: {
       directory: "./data/migrations",
