@@ -1,4 +1,4 @@
-const dbConnection = process.env.DATABASE_URL;
+const pgConnection = process.env.DATABASE_URL;
 
 
 module.exports = {
@@ -44,14 +44,17 @@ module.exports = {
 
 
   production: {
-    client: 'pg',
-    connection: dbConnection,
-    seeds: {
-      directory: './data/seeds'
+    client: "pg", // npm i pg
+    connection: pgConnection,
+    pool: {
+      min: 2,
+      max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations',
-      directory: './data/migrations'
+      directory: "./data/migrations",
+    },
+    seeds: {
+      directory: "./data/seeds",
     }
   }
 
