@@ -4,6 +4,8 @@ exports.up = function(knex) {
             tbl.increments();
             tbl.string("username", 130).notNullable().unique();
             tbl.string("password", 130).notNullable();
+            tbl.string("location").notNullable();
+            tbl.string("name").notNullable();
         })
 
         .createTable("recipes", tbl => {
