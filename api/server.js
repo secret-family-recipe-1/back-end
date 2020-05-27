@@ -11,8 +11,8 @@ const server = express();
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
-server.use("/api/recipes", recipesRouter);
-server.use("/api/users", usersRouter);
+server.use("/api/recipes", authenticate, recipesRouter);
+server.use("/api/users", authenticate, usersRouter);
 server.use("/api/auth", authRouter);
 
 server.get('/', (req, res) => {

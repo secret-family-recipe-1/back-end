@@ -100,7 +100,7 @@
 ```
 ---
 ## GET Recipes by id
-### Endpoint /api/recipes/:i
+### Endpoint /api/recipes/:id
 #### Returns Recipe by give Id
 ```
    {
