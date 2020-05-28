@@ -50,42 +50,41 @@ describe("GET /api/users", () => {
     });
   });
 
-  // describe("DELETE /api/users/:id", () => {
-  //   it("returns 200 OK w/ token", async () => {
-  //     await supertest(server)
-  //       .post("/api/auth/register")
-  //       .send({ username: "cole", password: "recipes4", location: "BY", name: "Timothy" })
-  //       .then(async () => {
-  //         await supertest(server)
-  //           .post("/api/auth/login")
-  //           .send({ username: "cole", password: "recipes4" })
-  //           .then(async (res) => {
-  //             const token = res.body.token;
-  //             await supertest(server)
-  //               .delete('/api/users/1')
-  //               .set("Authorization", token)
-  //               .expect(200);
-  //           });
-  //       });
-  //   });
-  // });
+  describe("DELETE /api/users/:id", () => {
+    it("returns 200 OK w/ token", async () => {
+      await supertest(server)
+        .post("/api/auth/register")
+        .send({ username: "jeff", password: "recipes45", location: "BY", name: "Timothy" })
+        .then(async () => {
+          await supertest(server)
+            .post("/api/auth/login")
+            .send({ username: "jeff", password: "recipes45" })
+            .then(async (res) => {
+              const token = res.body.token;
+              await supertest(server)
+                .delete('/api/users/3')
+                .set("Authorization", token)
+                .expect(200);
+            });
+        });
+    });
+  });
 
   describe("PUT /api/users/:id", () => {
     it("returns 200 OK w/ token", async () => {
       await supertest(server)
         .post("/api/auth/register")
-        .send({ username: "test", password: "recipes123", location: "BY", name: "Timothy" })
+        .send({ username: "kyle", password: "recipes1236", location: "BY", name: "Timothy" })
         .then(async () => {
           await supertest(server)
             .post("/api/auth/login")
-            .send({ username: "test", password: "recipes123" })
+            .send({ username: "kyle", password: "recipes1236" })
             .then(async (res) => {
               const token = res.body.token;
-              await db("users").insert(user2);
               await supertest(server)
                 .put('/api/users/2')
                 .set("Authorization", token)
-                .send(user2)
+                .send(user3)
                 .expect(200);
             });
         });
