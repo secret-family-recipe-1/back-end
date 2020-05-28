@@ -1,57 +1,15 @@
-// const supertest = require("supertest");
-// const server = require("../api/server.js");
-// const db = require("../data/dbconfig.js");
-
-
-      
-//       /// WORKS WELL//
-
-//     describe('GET recipes by Id ', () => {
-//         it('returns recipe', () => {
-//           return supertest(server)
-//             .get('/api/recipes/1')
-//             .then(res => {
-//               expect(res.status).toBe(200);
-//             });
-//         });
-//         it('returns a 400 if the recipe is not found', () => {
-//           return supertest(server)
-//             .get('/api/recipes/666')
-//             .then(res => {
-//               expect(res.status).toBe(400);
-//             });
-//         });
-//       });
-
-//       describe('GET recipes by Category', () => {
-//         it('returns category recipe', () => {
-//           return supertest(server)
-//             .get('/api/recipes/italian')
-//             .then(res => {
-//               expect(res.status).toBe(200);
-//             });
-//         });
-//         it('returns a 400 if the recipe is not found', () => {
-//           return supertest(server)
-//             .get('/api/recipes/ethiopian')
-//             .then(res => {
-//               expect(res.status).toBe(400);
-//             });
-//         });
-//       });
-    
-
 const supertest = require("supertest");
 const server = require("../api/server");
 const db = require("../data/dbConfig");
 
-beforeEach(async () => {
-    await db("recipes").truncate();
-    await db("users").truncate();
-  });
+// beforeEach(async () => {
+//     await db("recipes").truncate();
+//     await db("users").truncate();
+//   });
 
 
 const recipe = {
+    id: 1,
     title: "Cake",
     source: "Monica",
     instructions: "Mix ingredients together, place in over for 45 minutes at 450 degrees",
@@ -62,6 +20,7 @@ const recipe = {
   }
 
 const recipe2 = {
+    id: 2,
     title: "Pizza",
     source: "Thomas",
     instructions: "Knead flour into circle, spread tomato sauce, cheese and pepperoni, place in oven",
@@ -71,7 +30,6 @@ const recipe2 = {
     user_id: 2
   }
 
-const id = 1;
 
 describe("GET /api/recipes", () => {
   it("returns 400 code: no token", async () => {
@@ -96,6 +54,53 @@ describe("GET /api/recipes", () => {
       });
   });
 });
+
+describe("GET /api/recipes/id/:id", () => {
+  it("returns 200 with valid token", async () => {
+    await supertest(server)
+      .post("/api/auth/register")
+      .send({ username: "test", password: "recipes", location: "AZ", name: 'Tex' })
+      .then(async () => {
+        await supertest(server)
+          .post("/api/auth/login")
+          .send({ username: "test", password: "recipes" })
+          .then(async (res) => {
+            const token = res.body.token;
+            await supertest(server)
+              .get("/api/projects/id/1")
+              .set("Authorization", token)
+              .then((response) => {
+                expect(200)
+              });
+          });
+      });
+  });
+});
+
+
+describe("GET /api/recipes/category/:category", () => {
+  it("returns 200 with valid token", async () => {
+    await supertest(server)
+      .post("/api/auth/register")
+      .send({ username: "test", password: "recipes", location: "AZ", name: 'Tex' })
+      .then(async () => {
+        await supertest(server)
+          .post("/api/auth/login")
+          .send({ username: "test", password: "recipes" })
+          .then(async (res) => {
+            const token = res.body.token;
+            await supertest(server)
+              .get("/api/projects/category/dessert")
+              .set("Authorization", token)
+              .then((response) => {
+                expect(200)
+              });
+          });
+      });
+  });
+});
+
+
 
 describe("POST /api/recipes", () => {
     it("returns 400 code: no token", async () => {
@@ -123,25 +128,45 @@ describe("POST /api/recipes", () => {
 
 })
 
-// describe("DELETE /api/recipe/:id", () => {
-//     it("returns 200 code and token", async () => {
-//         await supertest(server)
-//         .post("/api/auth/register")
-//         .send({ username: "test", password: "recipes", location: "BR", name: "Lou" })
-//         .then(async () => {
-//             await supertest(server)
-//                 .post("/api/auth/login")
-//                 .send({ username: "test", password: "recipes" })
-//                 .then(async (res) => {
-//                     const token = res.body.token;
-//                     await db("recipes").send(recipe);
-//                     await supertest(server)
-//                     .delete(recipe)
-//                     .set("Authorization", token)
-//                     .expect(200);
-//                 })
 
-//         })
-//     })
+describe("DELETE /api/recipes/:id", () => {
+  it("returns 200 OK w/ token", async () => {
+    await supertest(server)
+      .post("/api/auth/register")
+      .send({ username: "test", password: "recipes", location: "BY", name: "Timothy" })
+      .then(async () => {
+        await supertest(server)
+          .post("/api/auth/login")
+          .send({ username: "test", password: "recipes" })
+          .then(async (res) => {
+            const token = res.body.token;
+            await supertest(server)
+              .delete('/api/recipes/2')
+              .set("Authorization", token)
+              .expect(200);
+          });
+      });
+  });
+});
 
-// })
+describe("PUT /api/recipes/:id", () => {
+  it("returns 200 OK w/ token", async () => {
+    await supertest(server)
+      .post("/api/auth/register")
+      .send({ username: "test", password: "recipes", location: "BY", name: "Timothy" })
+      .then(async () => {
+        await supertest(server)
+          .post("/api/auth/login")
+          .send({ username: "test", password: "recipes" })
+          .then(async (res) => {
+            const token = res.body.token;
+            await db("recipes").insert(recipe2);
+            await supertest(server)
+              .put(`/api/recipes/2`)
+              .set("Authorization", token)
+              .send(recipe2)
+              .expect(200);
+          });
+      });
+  });
+});

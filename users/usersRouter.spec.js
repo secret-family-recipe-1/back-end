@@ -1,26 +1,10 @@
-// const supertest = require("supertest");
-// const server = require("../api/server.js");
-// const db = require("../data/dbconfig.js");
-
-// // beforeEach(async () => {
-// //     await db("users").truncate();
-// //   });
-
-
-//     describe("GET /", () => {
-//       it("should return 200 ", async () => {
-//         const res = await supertest(server).get("/api/users");
-//         expect(res.status).toBe(200);
-//       });
-//     });
-
 const supertest = require("supertest");
 const server = require("../api/server");
 const db = require("../data/dbConfig");
 
-beforeEach(async () => {
-    await db("users").truncate();
-  });
+// beforeEach(async () => {
+//     await db("users").truncate();
+//   });
 
   const user1 = {
     username: "cole",
@@ -61,6 +45,48 @@ describe("GET /api/users", () => {
                 .set("Authorization", token)
                 .expect(200)
                 .expect(Array);
+            });
+        });
+    });
+  });
+
+  // describe("DELETE /api/users/:id", () => {
+  //   it("returns 200 OK w/ token", async () => {
+  //     await supertest(server)
+  //       .post("/api/auth/register")
+  //       .send({ username: "cole", password: "recipes4", location: "BY", name: "Timothy" })
+  //       .then(async () => {
+  //         await supertest(server)
+  //           .post("/api/auth/login")
+  //           .send({ username: "cole", password: "recipes4" })
+  //           .then(async (res) => {
+  //             const token = res.body.token;
+  //             await supertest(server)
+  //               .delete('/api/users/1')
+  //               .set("Authorization", token)
+  //               .expect(200);
+  //           });
+  //       });
+  //   });
+  // });
+
+  describe("PUT /api/users/:id", () => {
+    it("returns 200 OK w/ token", async () => {
+      await supertest(server)
+        .post("/api/auth/register")
+        .send({ username: "test", password: "recipes123", location: "BY", name: "Timothy" })
+        .then(async () => {
+          await supertest(server)
+            .post("/api/auth/login")
+            .send({ username: "test", password: "recipes123" })
+            .then(async (res) => {
+              const token = res.body.token;
+              await db("users").insert(user2);
+              await supertest(server)
+                .put('/api/users/2')
+                .set("Authorization", token)
+                .send(user2)
+                .expect(200);
             });
         });
     });
