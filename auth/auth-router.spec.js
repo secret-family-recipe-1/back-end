@@ -2,9 +2,9 @@ const supertest = require("supertest");
 const server = require("../api/server.js");
 const db = require("../data/dbconfig.js");
 
-// beforeEach(async () => {
-//     await db("users").truncate();
-//   });
+beforeEach(async () => {
+    await db("users").truncate();
+  });
 
 
     describe("auth-router.js", () => {
